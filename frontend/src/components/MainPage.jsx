@@ -132,7 +132,6 @@ const MainPage = () => {
                 className="cursor-pointer"
               >
                 <div className="font-semibold text-lg">{quiz.title}</div>
-                <div className="text-gray-400">{quiz.description}</div>
               </div>
 
               {/* 3-dot menu */}

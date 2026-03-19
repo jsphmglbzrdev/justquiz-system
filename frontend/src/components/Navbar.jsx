@@ -8,7 +8,7 @@ const Navbar = () => {
       className="fixed top-0 flex py-2 px-8 items-center justify-between w-full bg-gray-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 
 "
     >
-      <div className="text-2xl font-semibold">JustQuiz</div>
+      <Link to="/" className="text-2xl font-semibold">JustForms</Link>
       <div className="flex gap-5">
         <div>Account</div>
         <div>Settings</div>

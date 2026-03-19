@@ -1,19 +1,34 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const QUESTION_TYPES = [
   { label: "Multiple Choice", value: "multiple_choice" },
+  { label: "Checkboxes", value: "checkbox" },
+  { label: "Dropdown (tree)", value: "dropdown" },
   { label: "Short Answer", value: "short_answer" },
   { label: "Paragraph", value: "paragraph" },
-  { label: "Checkboxes", value: "checkbox" },
 ];
 
 const DropdownQuestionType = ({ value, onChange }) => {
   const [open, setOpen] = useState(false);
+  const wrapperRef = useRef(null);
 
   const selected = QUESTION_TYPES.find((q) => q.value === value);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (open && wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [open]);
+
   return (
-    <div className="relative w-60">
+    <div className="relative w-60" ref={wrapperRef}>
       {/* Selected */}
       <div
         onClick={() => setOpen(!open)}
