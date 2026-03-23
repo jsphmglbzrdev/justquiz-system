@@ -132,7 +132,7 @@ const Checkboxes = ({ question, onSave }) => {
           ))}
         </SortableContext>
       </DndContext>
-      <button onClick={handleAdd} className="mt-2 px-3 py-1 bg-green-600 rounded text-white">
+      <button onClick={handleAdd} className="mt-2 px-3 py-1 bg-blue-950 rounded text-white">
         + Add Option
       </button>
     </div>

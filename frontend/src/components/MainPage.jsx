@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoading } from "../context/LoadingContext";
 import supabase from "../supabase-client-config";
+import { notifySuccess, notifyError } from "../utils/toastService";
 
 // Page for the main dashboard, where users can see all their quizzes and create new ones
 const MainPage = () => {
@@ -52,6 +53,10 @@ const MainPage = () => {
 
       // 3️⃣ Navigate to the new quiz page
       navigate(`/quiz/${quizId}`);
+      notifySuccess("Quiz created.");
+    } catch (err) {
+      console.error("Error creating quiz:", err);
+      notifyError("Failed to create quiz.");
     } finally {
       setLoading(false);
     }
@@ -63,9 +68,10 @@ const MainPage = () => {
     if (error) {
       console.error("Error fetching quizzes:", error);
     } else {
-      setAllQuizzes(data);
+      const activeQuizzes = (data || []).filter((quiz) => !quiz.is_deleted);
+      setAllQuizzes(activeQuizzes);
       setLoading(false);
-      console.log("Quizzes fetched successfully:", data);
+      console.log("Quizzes fetched successfully:", activeQuizzes);
     }
   };
 
@@ -88,13 +94,16 @@ const MainPage = () => {
 
       if (error) {
         console.error("Failed to move quiz to trash:", error);
+        notifyError("Failed to delete quiz.");
         return;
       }
 
       // Remove from UI immediately
       setAllQuizzes((prev) => prev.filter((q) => q.id !== quizId));
+      notifySuccess("Quiz moved to trash.");
     } catch (error) {
       console.error("Unexpected error:", error);
+      toast.error("Unexpected error deleting quiz.");
     } finally {
       setLoading(false);
       setMenuOpenFor(null);
@@ -122,11 +131,14 @@ const MainPage = () => {
 
         {/* List of Quizzes */}
         <div>
-          {allQuizzes.map((quiz) => (
-            <div
-              key={quiz.id}
-              className="border border-gray-700 rounded-lg mt-5 p-5 relative"
-            >
+          {allQuizzes.length === 0 ? (
+            <div className="text-gray-400 mt-4">Start creating your form.</div>
+          ) : (
+            allQuizzes.map((quiz) => (
+              <div
+                key={quiz.id}
+                className="border border-gray-700 rounded-lg mt-5 p-5 relative"
+              >
               <div
                 onClick={() => openExistingQuiz(quiz.id)}
                 className="cursor-pointer"
@@ -161,7 +173,8 @@ const MainPage = () => {
                 )}
               </div>
             </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>

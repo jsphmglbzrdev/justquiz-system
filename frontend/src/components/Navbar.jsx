@@ -5,7 +5,7 @@ const Navbar = () => {
 	
   return (
     <div
-      className="fixed top-0 flex py-2 px-8 items-center justify-between w-full bg-gray-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 
+      className="fixed top-0 flex py-2 px-8 items-center z-[999] justify-between w-full bg-gray-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 
 "
     >
       <Link to="/" className="text-2xl font-semibold">JustForms</Link>

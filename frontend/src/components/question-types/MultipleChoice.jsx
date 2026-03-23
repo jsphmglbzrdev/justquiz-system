@@ -1,29 +1,62 @@
 import { useEffect, useState } from "react";
 import { DndContext, closestCenter } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from "@dnd-kit/sortable";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  useSortable,
+  arrayMove,
+} from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-
-const SortableOption = ({ option, index, handleChange, handleDelete, handleBlur, handleKeyDown }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: option.uiId });
+import { Trash2 } from "lucide-react";
+const SortableOption = ({
+  option,
+  index,
+  handleChange,
+  handleDelete,
+  handleBlur,
+  handleKeyDown,
+}) => {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: option.uiId });
   const style = { transform: CSS.Transform.toString(transform), transition };
   return (
-    <div ref={setNodeRef} style={style} className="flex items-center gap-2 mb-2 bg-gray-900 p-2 rounded">
-      <span {...attributes} {...listeners} className="cursor-grab text-gray-400">⠿</span>
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="flex items-center gap-2 mb-2 bg-gray-900 p-2 rounded"
+    >
+      <span
+        {...attributes}
+        {...listeners}
+        className="cursor-grab text-gray-400"
+      >
+        ⠿
+      </span>
       <input
         className="flex-1 bg-gray-800 border-b border-gray-600 outline-none p-1 text-white"
         value={option.option_text}
-        onChange={e => handleChange(index, e.target.value)}
-        onBlur={e => handleBlur(index, e.target.value)}
-        onKeyDown={e => handleKeyDown(e, index, e.target.value)}
+        onChange={(e) => handleChange(index, e.target.value)}
+        onBlur={(e) => handleBlur(index, e.target.value)}
+        onKeyDown={(e) => handleKeyDown(e, index, e.target.value)}
       />
-      <button onClick={() => handleDelete(index)} className="text-red-500 font-bold px-2">×</button>
+      <button
+        onClick={() => handleDelete(index)}
+        className="text-gray-400 hover:text-gray-500"
+      >
+        <div className="hover:bg-gray-800 p-2 transition-all rounded-full">
+          <Trash2 />
+        </div>
+      </button>
     </div>
   );
 };
 
 const MultipleChoice = ({ question, onSave }) => {
   const [options, setOptions] = useState(() =>
-    (question.options || []).map((o) => ({ ...o, uiId: o.id ?? crypto.randomUUID() })),
+    (question.options || []).map((o) => ({
+      ...o,
+      uiId: o.id ?? crypto.randomUUID(),
+    })),
   );
 
   // Keep local options in sync with upstream question.options
@@ -31,7 +64,9 @@ const MultipleChoice = ({ question, onSave }) => {
   useEffect(() => {
     const incoming = question.options || [];
     setOptions((prev) => {
-      const prevById = new Map(prev.filter((o) => o.id != null).map((o) => [o.id, o]));
+      const prevById = new Map(
+        prev.filter((o) => o.id != null).map((o) => [o.id, o]),
+      );
       const prevByOrder = new Map(prev.map((o) => [o.option_order, o]));
       return incoming.map((o) => {
         const existingById = o.id != null ? prevById.get(o.id) : null;
@@ -44,9 +79,6 @@ const MultipleChoice = ({ question, onSave }) => {
       });
     });
   }, [question.options]);
-
-
-
 
   const saveOptionAt = (index, value) => {
     const newOptions = [...options];
@@ -97,7 +129,10 @@ const MultipleChoice = ({ question, onSave }) => {
   return (
     <div className="mt-2">
       <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext items={options.map((o) => o.uiId)} strategy={verticalListSortingStrategy}>
+        <SortableContext
+          items={options.map((o) => o.uiId)}
+          strategy={verticalListSortingStrategy}
+        >
           {options.map((option, index) => (
             <SortableOption
               key={option.uiId}
@@ -116,7 +151,10 @@ const MultipleChoice = ({ question, onSave }) => {
           ))}
         </SortableContext>
       </DndContext>
-      <button onClick={handleAdd} className="mt-2 px-3 py-1 bg-green-600 rounded text-white">
+      <button
+        onClick={handleAdd}
+        className="mt-2 px-3 py-1 bg-blue-950 rounded text-white"
+      >
         + Add Option
       </button>
     </div>

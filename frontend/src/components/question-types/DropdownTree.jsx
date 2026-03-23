@@ -110,7 +110,7 @@ const DropdownTree = ({ question, onSave }) => {
             ))}
             <button
               onClick={() => addChild(rootIndex)}
-              className="px-3 py-1 bg-blue-600 rounded text-white"
+              className="px-3 py-1 bg-blue-950 rounded text-white"
             >
               + Add Sub-option
             </button>
@@ -118,7 +118,7 @@ const DropdownTree = ({ question, onSave }) => {
         </div>
       ))}
 
-      <button onClick={addRoot} className="mt-2 px-3 py-1 bg-green-600 rounded text-white">
+      <button onClick={addRoot} className="mt-2 px-3 py-1 bg-blue-950 rounded text-white">
         + Add Top-level option
       </button>
     </div>

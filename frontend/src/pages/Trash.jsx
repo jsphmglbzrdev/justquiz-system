@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import supabase from "../supabase-client-config";
 import { useNavigate } from "react-router-dom";
+import { notifySuccess, notifyError } from "../utils/toastService";
 
 const Trash = () => {
   const [trashData, setTrashData] = useState([]);
@@ -48,8 +49,10 @@ const Trash = () => {
 
       // 6. Update UI
       setTrashData([]);
+      notifySuccess("Trash emptied.");
     } catch (error) {
       console.error("Error emptying trash:", error);
+      notifyError("Failed to empty trash.");
     }
   };
 
